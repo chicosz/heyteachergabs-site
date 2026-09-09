@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste de nível · Hey Teacher Gabs</title>
+<meta name="description" content="Descubra seu nível real de conversação em inglês em 5 minutos. Resultado na hora, sem cadastro.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1C0F16;--pri:#FB4734;--cream:#FCF8FA;--lite:#FFB8AE;--dark:#77014E;--tint:#FDE6E2;--grey:#F3EDF0;--line:rgba(28,15,22,.10);
+  --inter:'Inter',Arial,sans-serif;--round:'Outfit','Inter',Arial,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:var(--inter);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:inherit}
+
+/* pattern de fundo (bolinhas em tinta 8%) */
+.q-pattern{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(28,15,22,.08) 1.2px,transparent 1.2px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%)}
+
+/* header */
+.q-header{position:relative;z-index:2;background:var(--cream);border-bottom:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+@media(min-width:768px){.q-header{padding:14px 32px}}
+.q-logo{font-family:var(--round);font-weight:700;font-size:19px;letter-spacing:-.4px}
+.q-logo b{color:var(--pri)}
+.q-voltar-site{font-weight:700;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;border:2px solid var(--ink);border-radius:999px;padding:9px 14px;box-shadow:3px 3px 0 var(--ink);background:var(--cream);transition:transform .2s,box-shadow .2s}
+.q-voltar-site:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+
+/* layout */
+.q-inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 16px 60px;max-width:760px;margin:0 auto;width:100%}
+@media(min-width:768px){.q-inner{padding:48px 24px 80px}}
+.q-pill{display:inline-flex;align-items:center;gap:8px;background:var(--ink);border-radius:999px;padding:10px 18px;font-family:var(--round);font-weight:700;font-size:11.5px;line-height:1;letter-spacing:1.4px;text-transform:uppercase;color:var(--lite)}
+.q-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--pri)}
+.q-title{margin-top:16px;font-weight:800;font-size:28px;line-height:1.06;letter-spacing:-1.1px;text-align:center;max-width:640px}
+.q-title .hl{font-family:var(--round);font-weight:700;color:var(--pri)}
+@media(min-width:768px){.q-title{font-size:44px;letter-spacing:-2px}}
+.q-sub{margin-top:12px;font-weight:500;font-size:15px;line-height:1.5;color:rgba(28,15,22,.75);text-align:center;max-width:520px}
+
+/* card */
+.q-card{margin-top:26px;width:100%;background:var(--cream);border:2px solid var(--ink);border-radius:24px;box-shadow:8px 8px 0 var(--ink);padding:22px 18px 24px;position:relative}
+@media(min-width:768px){.q-card{padding:30px 32px 34px;margin-top:34px}}
+.q-topo{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.q-voltar{font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:rgba(28,15,22,.55);visibility:hidden}
+.q-voltar.on{visibility:visible}
+.q-voltar:hover{color:var(--pri)}
+.q-count{font-family:var(--round);font-weight:700;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dark)}
+.q-bar{margin-top:14px;height:10px;border-radius:999px;background:var(--grey);border:2px solid var(--ink);overflow:hidden}
+.q-bar i{display:block;height:100%;background:var(--pri);width:0;transition:width .35s ease}
+
+/* etapa */
+.q-etapa{display:none;margin-top:22px}
+.q-etapa.on{display:block;animation:q-in .28s ease}
+@keyframes q-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.q-tag{display:inline-flex;background:var(--tint);border:2px solid var(--ink);border-radius:999px;padding:6px 12px;font-family:var(--round);font-weight:700;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dark)}
+.q-perg{margin-top:12px;font-weight:800;font-size:20px;line-height:1.2;letter-spacing:-.5px}
+@media(min-width:768px){.q-perg{font-size:24px;letter-spacing:-.7px}}
+.q-ctx{margin-top:10px;background:var(--ink);color:var(--cream);border-radius:16px;padding:14px 16px;font-weight:600;font-size:15.5px;line-height:1.4;border-left:6px solid var(--pri)}
+.q-ctx small{display:block;font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--lite);margin-bottom:5px}
+.q-opcoes{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.q-opcao{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--cream);border:2px solid var(--ink);border-radius:16px;padding:14px 16px;box-shadow:3px 3px 0 var(--ink);transition:transform .18s,box-shadow .18s,background .18s}
+.q-opcao:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.q-opcao.on{background:var(--tint);box-shadow:5px 5px 0 var(--pri)}
+.q-radio{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center}
+.q-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--pri);transform:scale(0);transition:transform .18s}
+.q-opcao.on .q-radio::after{transform:scale(1)}
+.q-opcao-txt{font-weight:600;font-size:15px;line-height:1.35}
+.q-opcao-txt small{display:block;font-weight:500;font-size:12.5px;color:rgba(28,15,22,.6);margin-top:2px}
+.q-area{margin-top:14px;width:100%;min-height:120px;resize:vertical;background:var(--cream);border:2px solid var(--ink);border-radius:16px;padding:14px 16px;box-shadow:3px 3px 0 var(--ink);font-weight:500;font-size:15px;line-height:1.5}
+.q-area:focus{outline:none;box-shadow:5px 5px 0 var(--pri)}
+.q-dica{margin-top:10px;font-weight:500;font-size:12.5px;color:rgba(28,15,22,.6)}
+
+/* botão */
+.q-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:17px 26px;border:2px solid var(--ink);border-radius:999px;background:var(--pri);box-shadow:5px 5px 0 var(--ink);font-weight:800;font-size:12.5px;line-height:18px;letter-spacing:.9px;text-transform:uppercase;color:var(--ink);transition:transform .22s,box-shadow .22s,opacity .2s;width:100%}
+.q-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.q-btn:disabled{opacity:.35;pointer-events:none}
+.q-btn.ghost{background:var(--cream)}
+.q-btn.dark{background:var(--dark);color:var(--cream)}
+@media(min-width:768px){.q-btn{width:auto;min-height:62px;padding:19px 32px;font-size:13.5px}}
+.q-acoes{margin-top:20px;display:flex;flex-direction:column;gap:12px}
+@media(min-width:768px){.q-acoes{flex-direction:row;justify-content:flex-end}}
+
+/* resultado */
+.q-res{display:none}
+.q-res.on{display:block;animation:q-in .35s ease}
+.q-res-nivel{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:var(--ink);color:var(--cream);border-radius:20px;padding:20px;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--pri)}
+.q-res-badge{width:84px;height:84px;border-radius:50%;background:var(--pri);color:var(--ink);display:grid;place-items:center;font-family:var(--round);font-weight:700;font-size:28px;border:3px solid var(--cream)}
+.q-res-nivel h3{font-weight:800;font-size:20px;letter-spacing:-.5px;line-height:1.15}
+.q-res-nivel p{margin-top:6px;font-weight:500;font-size:14px;line-height:1.45;color:rgba(252,248,250,.8)}
+.q-res-cando{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.q-res-cando div{display:grid;grid-template-columns:22px 1fr;gap:10px;font-weight:500;font-size:14.5px;line-height:1.4;padding:10px 12px;border:2px solid var(--ink);border-radius:12px;background:var(--cream)}
+.q-res-cando div::before{content:"✓";font-weight:800;color:var(--pri)}
+.q-res-cando div.no::before{content:"–";color:rgba(28,15,22,.4)}
+.q-res-cando div.no{color:rgba(28,15,22,.55);border-style:dashed}
+.q-res-cam{margin-top:18px;background:var(--tint);border:2px solid var(--ink);border-radius:20px;padding:18px;box-shadow:5px 5px 0 var(--ink)}
+.q-res-cam .q-tag{background:var(--pri);color:var(--ink)}
+.q-res-cam h4{margin-top:10px;font-weight:800;font-size:19px;letter-spacing:-.5px}
+.q-res-cam p{margin-top:6px;font-weight:500;font-size:14px;line-height:1.45;color:rgba(28,15,22,.8)}
+.q-form{margin-top:22px;border-top:2px dashed var(--ink);padding-top:22px}
+.q-form h4{font-weight:800;font-size:18px;letter-spacing:-.4px}
+.q-form p{margin-top:6px;font-weight:500;font-size:14px;color:rgba(28,15,22,.7)}
+.q-campos{margin-top:14px;display:grid;gap:10px}
+@media(min-width:600px){.q-campos{grid-template-columns:1fr 1fr}.q-campos .full{grid-column:1/-1}}
+.q-campo{background:var(--cream);border:2px solid var(--ink);border-radius:14px;padding:13px 14px;box-shadow:3px 3px 0 var(--ink);font-weight:500;font-size:15px;width:100%}
+.q-campo:focus{outline:none;box-shadow:5px 5px 0 var(--pri)}
+.q-lgpd{margin-top:12px;font-weight:500;font-size:11.5px;line-height:1.45;color:rgba(28,15,22,.55)}
+.q-ok{display:none;margin-top:16px;background:var(--dark);color:var(--cream);border-radius:16px;padding:16px 18px;font-weight:600;font-size:14.5px}
+.q-ok.on{display:block}
+.q-foot{position:relative;z-index:1;text-align:center;padding:0 16px 30px;font-weight:500;font-size:12px;color:rgba(28,15,22,.5);max-width:520px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="q-pattern"></div>
+
+<header class="q-header">
+  <a class="q-logo" href="index.html">Hey Teacher <b>Gabs</b></a>
+  <a class="q-voltar-site" href="index.html">← Voltar ao site</a>
+</header>
+
+<!-- CONFIG: preencha data-endpoint / data-apikey com a REST do Supabase (tabela "nivelamento").
+     data-whatsapp aceita a URL da Cora (sem prefill) ou um wa.me/55DDD9XXXXXXXX (com prefill). -->
+<main class="q-inner" id="q" data-endpoint="" data-apikey="" data-whatsapp="https://gabs.fqsc.com.br/cora">
+
+  <span class="q-pill"><span class="dot"></span>Teste gratuito · 5 minutos</span>
+  <h1 class="q-title">Qual é o seu nível <span class="hl">real de conversação</span>?</h1>
+  <p class="q-sub">Não é prova de gramática. São situações reais: o que você diria? O teste se adapta às suas respostas.</p>
+
+  <div class="q-card">
+    <div class="q-topo">
+      <button class="q-voltar" id="q-voltar" type="button">← Voltar</button>
+      <span class="q-count" id="q-count">Pergunta 1 de 15</span>
+    </div>
+    <div class="q-bar"><i id="q-bar"></i></div>
+
+    <!-- ETAPAS (geradas por JS) -->
+    <div id="q-etapas"></div>
+
+    <!-- RESULTADO -->
+    <div class="q-res" id="q-res">
+      <div class="q-res-nivel">
+        <div class="q-res-badge" id="r-badge">B1</div>
+        <div><h3 id="r-titulo">Você está no nível B1</h3><p id="r-desc"></p></div>
+      </div>
+      <div class="q-res-cando" id="r-cando"></div>
+      <div class="q-res-cam">
+        <span class="q-tag" id="r-camtag">Caminho recomendado</span>
+        <h4 id="r-cam"></h4>
+        <p id="r-camdesc"></p>
+      </div>
+
+      <div class="q-form" id="q-form">
+        <h4>Quer o plano completo no WhatsApp?</h4>
+        <p>Eu te mando o diagnóstico detalhado, o que treinar primeiro e as turmas abertas do seu nível.</p>
+        <div class="q-campos">
+          <input class="q-campo" id="f-nome" type="text" placeholder="Seu nome" autocomplete="name">
+          <input class="q-campo" id="f-whats" type="tel" placeholder="WhatsApp com DDD" autocomplete="tel">
+          <input class="q-campo full" id="f-email" type="email" placeholder="Seu melhor e-mail" autocomplete="email">
+        </div>
+        <div class="q-acoes"><button class="q-btn" id="f-enviar" type="button">Receber meu plano no WhatsApp</button></div>
+        <p class="q-lgpd">Ao enviar você concorda com o tratamento dos seus dados conforme a Política de Privacidade. Nenhuma resposta é publicada.</p>
+        <div class="q-ok" id="f-ok">Recebido! Abrindo o WhatsApp da Gabs para você.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<p class="q-foot">Resultado na hora, sem cadastro obrigatório para ler. O cadastro só é pedido para você receber o plano.</p>
+
+<script>
+(function(){
+/* ================= BANCO DE ITENS (4 por nível, resposta certa = índice 0, embaralhada na tela) ================= */
+var NIVEIS=['A1','A2','B1','B2'];
+var BANCO={
+ A1:[
+  {ctx:"Alguém te cumprimenta:",fala:"Hi! How are you?",ops:["I'm fine, thanks. And you?","I have 30 years.","Yes, I am.","Good morning is."]},
+  {ctx:"No café, o atendente pergunta:",fala:"What would you like?",ops:["A coffee, please.","I like coffee is.","Coffee want I.","Please the coffee me."]},
+  {ctx:"Numa apresentação:",fala:"Where are you from?",ops:["I'm from Brazil.","I from Brazil am.","Brazil is me.","I have Brazil."]},
+  {ctx:"Na rua, alguém pergunta:",fala:"What time is it?",ops:["It's three o'clock.","Is three hours.","Three the time.","It have three."]}
+ ],
+ A2:[
+  {ctx:"Um colega pergunta:",fala:"Did you finish the report?",ops:["Not yet, I'll send it this afternoon.","Yes, I finish it tomorrow.","I am finish yesterday.","No, I sending now."]},
+  {ctx:"Na recepção do hotel:",fala:"Is there a problem with the room?",ops:["Yes, the air conditioning isn't working.","Yes, the air conditioning don't works.","The room have problem of air.","Air is no work in room."]},
+  {ctx:"Numa conversa casual:",fala:"How long have you been learning English?",ops:["For about two years.","Since two years.","Is two years I learn.","I learn two years ago."]},
+  {ctx:"Alguém pede:",fala:"Can you help me with this?",ops:["Sure, what do you need?","Yes, I can to help.","Of course, what you need?","Sure, which is you need?"]}
+ ],
+ B1:[
+  {ctx:"Numa reunião:",fala:"What do you think about the new schedule?",ops:["Honestly, I think it's too tight. We might need another week.","I think is too tight, maybe need more one week.","Honestly, the schedule have too much tight.","In my think, we need one week more."]},
+  {ctx:"Um amigo pergunta:",fala:"Why didn't you come to the party?",ops:["I would have come, but I had to work late.","I would come but I had work late.","I didn't came because I work late.","I have to work late so I not come."]},
+  {ctx:"Um cliente reclama:",fala:"We're not happy with the delay.",ops:["I understand. Let me check what happened and get back to you today.","I understand you. I check what happen and return today.","Sorry for delay, I will see it and answer.","I'm understanding. Let me to check and back to you."]},
+  {ctx:"Papo de viagem:",fala:"If you could travel anywhere, where would you go?",ops:["I'd probably go to Japan. I've always wanted to see Tokyo.","I probably go to Japan, I always want see Tokyo.","I would went to Japan because I always wanted.","Japan, I'd always wanting to see Tokyo."]}
+ ],
+ B2:[
+  {ctx:"Seu chefe pede:",fala:"Can you walk me through the numbers?",ops:["Of course. Revenue is up 12%, but margins have narrowed because shipping costs rose.","Of course. Revenue up 12%, but margin narrow because shipping cost rise.","Yes. The revenue increased 12% but the margins is more narrow for shipping.","Sure. Revenue has 12% up, margins narrowed cause shipping costs."]},
+  {ctx:"Um colega comenta:",fala:"I heard the project got cancelled.",ops:["It nearly did, but we managed to convince them to give it another quarter.","It almost did, but we managed convince them for give another quarter.","Nearly, but we get to convince them another quarter.","It was near cancel, but we convinced to give one more quarter."]},
+  {ctx:"Alguém pergunta com educação:",fala:"Do you mind if I open the window?",ops:["Not at all, go ahead.","Yes, please open.","No, I don't mind you open.","Of course, I mind not."]},
+  {ctx:"Depois de uma entrevista:",fala:"How did the interview go?",ops:["Better than I expected, although they seemed unsure about my availability.","Better than I expect, although they seem unsure about my available.","Was better than expected, but they were not sure of my availability is.","More better than I expected, although they seemed unsure for my availability."]}
+ ]
+};
+var N_ITENS=10;
+
+/* ================= PERFIL (perguntas fixas) ================= */
+var PERFIL_INICIO=[
+ {id:'auto',tag:'Para começar',perg:'Como você define o seu inglês hoje?',ops:[
+   {v:'A',t:'Inglês do zero',s:'Só sei umas palavras soltas'},
+   {v:'B',t:'Entendo um pouco, não falo nada'},
+   {v:'C',t:'Entendo ok, falo quase nada'},
+   {v:'D',t:'Entendo ok, falo travando'},
+   {v:'E',t:'Entendo bem, preciso melhorar a fala'}]},
+ {id:'objetivo',tag:'Seu objetivo',perg:'Para que você mais precisa do inglês agora?',ops:[
+   {v:'trabalho',t:'Trabalho',s:'Reuniões, calls, e-mails, apresentações'},
+   {v:'entrevista',t:'Entrevista de emprego',s:'Processo seletivo em inglês'},
+   {v:'viagem',t:'Viagem',s:'Me virar sozinho fora do Brasil'},
+   {v:'geral',t:'Confiança no geral',s:'Parar de travar em qualquer situação'}]}
+];
+var PERFIL_FIM=[
+ {id:'producao',tag:'Agora é com você',perg:'Escreva 2 ou 3 frases em inglês respondendo: What do you do, and why do you want to speak English?',area:true,dica:'Não precisa estar perfeito. A Gabs lê isso pessoalmente para calibrar o seu nível. Pode pular se preferir.'},
+ {id:'prazo',tag:'Quase lá',perg:'Quando você quer começar?',ops:[
+   {v:'agora',t:'Agora',s:'Já, se tiver turma'},
+   {v:'mes',t:'Nas próximas semanas'},
+   {v:'depois',t:'Ainda estou pesquisando'}]},
+ {id:'invest',tag:'Última',perg:'Quanto você consegue investir por mês no seu inglês?',ops:[
+   {v:'ate100',t:'Até R$ 100'},
+   {v:'ate300',t:'Entre R$ 100 e R$ 300'},
+   {v:'ate600',t:'Entre R$ 300 e R$ 600'},
+   {v:'mais600',t:'Mais de R$ 600'}]}
+];
+
+/* ================= ESTADO ================= */
+var root=document.getElementById('q'), wrap=document.getElementById('q-etapas');
+var barEl=document.getElementById('q-bar'), countEl=document.getElementById('q-count'), voltarBtn=document.getElementById('q-voltar');
+var TOTAL=PERFIL_INICIO.length+N_ITENS+PERFIL_FIM.length;
+var st={idx:0,resp:{},itens:[],lvl:1,usados:{A1:[],A2:[],B1:[],B2:[]},acertos:{A1:0,A2:0,B1:0,B2:0},vistos:{A1:0,A2:0,B1:0,B2:0}};
+
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function el(h){var d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild}
+
+/* ================= RENDER ================= */
+function renderPerfil(p){
+  var h='<div class="q-etapa on"><span class="q-tag">'+p.tag+'</span><p class="q-perg">'+p.perg+'</p>';
+  if(p.area){h+='<textarea class="q-area" id="q-area" placeholder="Type here..."></textarea><p class="q-dica">'+p.dica+'</p>'+
+    '<div class="q-acoes"><button class="q-btn ghost" type="button" data-skip="1">Pular</button><button class="q-btn" type="button" data-next="1">Continuar</button></div>';}
+  else{h+='<div class="q-opcoes" role="radiogroup">'+p.ops.map(function(o){return '<button class="q-opcao" type="button" data-v="'+o.v+'"><span class="q-radio"></span><span class="q-opcao-txt">'+o.t+(o.s?'<small>'+o.s+'</small>':'')+'</span></button>'}).join('')+'</div>';}
+  h+='</div>';
+  var e=el(h);
+  e.querySelectorAll('.q-opcao').forEach(function(b){b.addEventListener('click',function(){
+    e.querySelectorAll('.q-opcao').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+    st.resp[p.id]=b.getAttribute('data-v');setTimeout(avancar,260);})});
+  var nx=e.querySelector('[data-next]');if(nx)nx.addEventListener('click',function(){st.resp[p.id]=(e.querySelector('#q-area').value||'').trim();avancar();});
+  var sk=e.querySelector('[data-skip]');if(sk)sk.addEventListener('click',function(){st.resp[p.id]='';avancar();});
+  return e;
+}
+function pickItem(){
+  /* busca do nível atual para fora, por distância, até achar item não usado */
+  var ordem=[st.lvl,st.lvl+1,st.lvl-1,st.lvl+2,st.lvl-2,st.lvl+3,st.lvl-3].filter(function(x){return x>=0&&x<4});
+  for(var k=0;k<ordem.length;k++){
+    var lv=NIVEIS[ordem[k]],pool=BANCO[lv].map(function(_,i){return i}).filter(function(i){return st.usados[lv].indexOf(i)<0});
+    if(pool.length){st.lvl=ordem[k];var i=pool[Math.floor(Math.random()*pool.length)];st.usados[lv].push(i);return {lv:lv,i:i,item:BANCO[lv][i]};}
+  }
+  return null;
+}
+function renderItem(n){
+  var pk=pickItem();if(!pk){st.idx=PERFIL_INICIO.length+N_ITENS-1;return renderPerfil({tag:'',perg:'',ops:[]});}
+  var it=pk.item,ordem=shuffle([0,1,2,3]);
+  var h='<div class="q-etapa on"><span class="q-tag">Situação '+(n+1)+' de '+N_ITENS+'</span><p class="q-perg">O que você diria?</p>'+
+   '<div class="q-ctx"><small>'+it.ctx+'</small>"'+it.fala+'"</div><div class="q-opcoes" role="radiogroup">'+
+   ordem.map(function(o){return '<button class="q-opcao" type="button" data-v="'+o+'"><span class="q-radio"></span><span class="q-opcao-txt">'+it.ops[o]+'</span></button>'}).join('')+'</div></div>';
+  var e=el(h);
+  e.querySelectorAll('.q-opcao').forEach(function(b){b.addEventListener('click',function(){
+    e.querySelectorAll('.q-opcao').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+    var ok=b.getAttribute('data-v')==='0';
+    st.vistos[pk.lv]++;if(ok)st.acertos[pk.lv]++;
+    st.itens.push({lv:pk.lv,i:pk.i,ok:ok});
+    st.lvl=Math.max(0,Math.min(3,st.lvl+(ok?1:-1)));
+    setTimeout(avancar,260);})});
+  return e;
+}
+function render(){
+  wrap.innerHTML='';
+  var i=st.idx,e;
+  if(i<PERFIL_INICIO.length)e=renderPerfil(PERFIL_INICIO[i]);
+  else if(i<PERFIL_INICIO.length+N_ITENS)e=renderItem(i-PERFIL_INICIO.length);
+  else e=renderPerfil(PERFIL_FIM[i-PERFIL_INICIO.length-N_ITENS]);
+  wrap.appendChild(e);
+  countEl.textContent='Pergunta '+(i+1)+' de '+TOTAL;
+  barEl.style.width=Math.round((i/TOTAL)*100)+'%';
+  voltarBtn.classList.toggle('on',i>0&&i<PERFIL_INICIO.length); /* voltar só nas de perfil; itens adaptativos não voltam */
+  var ta=wrap.querySelector('#q-area');if(ta)ta.focus();
+}
+function avancar(){
+  if(st.idx===0){ /* ponto de partida pelo autodeclarado */
+    st.lvl={A:0,B:0,C:1,D:1,E:2}[st.resp.auto]||0;
+  }
+  st.idx++;
+  if(st.idx>=TOTAL){resultado();return}
+  render();
+}
+voltarBtn.addEventListener('click',function(){if(st.idx>0){st.idx--;render()}});
+
+/* ================= RESULTADO (calibrado para baixo) ================= */
+var DESC={
+ ZERO:{t:'Você ainda está no começo',d:'Você reconhece algumas palavras, mas ainda não tem base para sustentar uma conversa. Isso não é um problema, é um ponto de partida.',
+  can:[['no','Se apresentar e responder perguntas simples'],['no','Pedir algo num café ou hotel'],['no','Manter uma conversa curta']]},
+ A1:{t:'Você está no nível A1',d:'Você se vira em frases curtas e situações previsíveis: se apresentar, pedir um café, dar uma informação simples.',
+  can:[['ok','Se apresentar e responder perguntas simples'],['ok','Pedir algo num café ou hotel'],['no','Contar algo que aconteceu ontem'],['no','Dar sua opinião numa reunião']]},
+ A2:{t:'Você está no nível A2',d:'Você resolve o dia a dia, mas trava quando a conversa sai do roteiro. É exatamente onde a maioria dos meus alunos chega.',
+  can:[['ok','Pedir algo num café ou hotel'],['ok','Contar algo que aconteceu ontem'],['no','Dar sua opinião numa reunião'],['no','Explicar um problema com detalhe']]},
+ B1:{t:'Você está no nível B1',d:'Você sustenta uma conversa sobre trabalho e opinião, com pausas e alguns erros. Daqui para a fluência é prática, não gramática.',
+  can:[['ok','Contar algo que aconteceu ontem'],['ok','Dar sua opinião numa reunião'],['ok','Explicar um problema com detalhe'],['no','Argumentar com nuance e naturalidade']]},
+ B2:{t:'Você está no nível B2',d:'Você argumenta e explica com nuance. O que falta é naturalidade, ritmo e confiança para não travar sob pressão.',
+  can:[['ok','Dar sua opinião numa reunião'],['ok','Explicar um problema com detalhe'],['ok','Argumentar com nuance'],['no','Soar natural sob pressão, sem pausar para traduzir']]}
+};
+function calcNivel(){
+  /* precisa de 2 acertos num nível para receber o nível. Cai para o anterior senão. */
+  for(var k=3;k>=0;k--){var lv=NIVEIS[k];if(st.acertos[lv]>=2)return lv;}
+  if(st.acertos.A1>=1)return 'A1';
+  return 'ZERO';
+}
+function calcFaixa(nivel){
+  var r=st.resp,inv=r.invest,prazo=r.prazo;
+  if(nivel==='ZERO')return 'C';
+  var podeInvestir=(inv==='ate600'||inv==='mais600');
+  var agora=(prazo==='agora'||prazo==='mes');
+  if(nivel!=='A1'&&podeInvestir&&agora)return 'A';
+  return 'B';
+}
+function caminho(nivel,faixa){
+  var o=st.resp.objetivo;
+  if(faixa==='C')return {tag:'Lista de espera',t:'Turma iniciante do zero',d:'Turmas do zero abrem quando fecha um grupo inteiro começando junto. Enquanto isso, o Inglês Pra Viajar é o melhor primeiro contato.'};
+  if(faixa==='A'){
+    var t=nivel==='B2'?'Turma avançada ou individual':'Turma em grupo, nível '+nivel;
+    return {tag:'Pronto para a turma',t:t,d:'Você tem nível, prazo e espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para montar seu início.'};
+  }
+  if(o==='viagem')return {tag:'Comece por aqui',t:'Inglês Pra Viajar',d:'Curso gravado, direto ao ponto, para você se virar sozinho em check-in, imigração, hotel e restaurante.'};
+  if(o==='entrevista')return {tag:'Comece por aqui',t:'You Are Hired',d:'Preparação focada em entrevista de emprego em inglês. Perguntas reais, respostas prontas para adaptar, e como se comunicar com confiança mesmo sem inglês perfeito.'};
+  return {tag:'Comece por aqui',t:'Study Play: 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria o hábito antes de entrar numa turma.'};
+}
+function resultado(){
+  wrap.innerHTML='';voltarBtn.classList.remove('on');
+  barEl.style.width='100%';countEl.textContent='Resultado';
+  var nivel=calcNivel(),faixa=calcFaixa(nivel),cam=caminho(nivel,faixa),d=DESC[nivel];
+  st.resultado={nivel:nivel,faixa:faixa,caminho:cam.t};
+  document.getElementById('r-badge').textContent=nivel==='ZERO'?'0':nivel;
+  document.getElementById('r-titulo').textContent=d.t;
+  document.getElementById('r-desc').textContent=d.d;
+  document.getElementById('r-cando').innerHTML=d.can.map(function(c){return '<div class="'+(c[0]==='no'?'no':'')+'">'+c[1]+'</div>'}).join('');
+  document.getElementById('r-camtag').textContent=cam.tag;
+  document.getElementById('r-cam').textContent=cam.t;
+  document.getElementById('r-camdesc').textContent=cam.d;
+  document.getElementById('q-res').classList.add('on');
+  try{localStorage.setItem('htgNivelamento',JSON.stringify(payload()))}catch(e){}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================= CAPTURA ================= */
+function cookie(n){var m=document.cookie.split('; ').find(function(c){return c.indexOf(n+'=')===0});return m?decodeURIComponent(m.split('=')[1]):null}
+function payload(){
+  var u=new URLSearchParams(location.search),p={
+    nivel:st.resultado?st.resultado.nivel:null,faixa:st.resultado?st.resultado.faixa:null,caminho:st.resultado?st.resultado.caminho:null,
+    autodeclarado:st.resp.auto,objetivo:st.resp.objetivo,prazo:st.resp.prazo,investimento:st.resp.invest,producao:st.resp.producao||'',
+    acertos:st.acertos,vistos:st.vistos,itens:st.itens,
+    nome:(document.getElementById('f-nome').value||'').trim(),whatsapp:(document.getElementById('f-whats').value||'').trim(),email:(document.getElementById('f-email').value||'').trim(),
+    lead_id:cookie('lead_id'),sck:cookie('sck')||u.get('sck'),
+    utm_source:cookie('utm_source')||u.get('utm_source'),utm_medium:cookie('utm_medium')||u.get('utm_medium'),utm_campaign:cookie('utm_campaign')||u.get('utm_campaign'),utm_content:cookie('utm_content')||u.get('utm_content'),
+    pagina:location.href,criado_em:new Date().toISOString()
+  };return p;
+}
+document.getElementById('f-enviar').addEventListener('click',function(){
+  var p=payload();
+  if(!p.nome||!p.whatsapp){alert('Preenche pelo menos nome e WhatsApp.');return}
+  var btn=this;btn.disabled=true;
+  var ep=root.getAttribute('data-endpoint'),key=root.getAttribute('data-apikey');
+  var done=function(){
+    document.getElementById('f-ok').classList.add('on');
+    var wa=root.getAttribute('data-whatsapp')||'';
+    var msg='Oi Gabs! Fiz o teste de nível: '+p.nivel+'. Objetivo: '+p.objetivo+'. Quero receber meu plano.';
+    if(wa.indexOf('wa.me')>=0)wa+=(wa.indexOf('?')>=0?'&':'?')+'text='+encodeURIComponent(msg);
+    setTimeout(function(){if(wa)location.href=wa},900);
+  };
+  if(ep){
+    fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','apikey':key||'','Authorization':'Bearer '+(key||''),'Prefer':'return=minimal'},body:JSON.stringify(p)})
+      .then(done).catch(function(){done()});
+  }else{try{localStorage.setItem('htgNivelamentoLead',JSON.stringify(p))}catch(e){}done();}
+});
+
+render();
+})();
+</script>
+</body>
+</html>

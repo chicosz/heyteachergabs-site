@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hey Teacher Gabs · Home v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#77014E; --purple-d:#55003a; --purple-l:#9d1a6d;
+  --coral:#FB4734; --coral-d:#e02f1d;
+  --warm:#FCF8FA; --ink:#14090F; --ink70:rgba(20,9,15,.72); --ink50:rgba(20,9,15,.5);
+  --line:rgba(20,9,15,.1);
+  --serif:"Playfair Display",Georgia,serif;
+  --script:"Playlist Script","Playfair Display",cursive;
+  --sans:Poppins,system-ui,-apple-system,sans-serif;
+  --pad:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--warm);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+
+/* ---------- tipografia ---------- */
+.h1{font-family:var(--serif);font-weight:900;font-size:clamp(38px,10.5vw,86px);line-height:.94;letter-spacing:-.035em;text-wrap:balance}
+.h2{font-family:var(--serif);font-weight:800;font-size:clamp(30px,7.5vw,60px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.h3{font-family:var(--serif);font-weight:700;font-size:clamp(20px,4.6vw,28px);line-height:1.12;letter-spacing:-.02em}
+.script{font-family:var(--script);font-weight:500;font-style:italic;letter-spacing:-.01em}
+.lede{font-size:clamp(16px,4.2vw,21px);line-height:1.5;font-weight:300;max-width:34ch}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+.small{font-size:14px;line-height:1.55}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+.sec{padding:88px 0}
+@media(min-width:900px){:root{--pad:40px} .sec{padding:130px 0}}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:60;background:rgba(252,248,250,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:62px}
+.logo{font-family:var(--serif);font-weight:800;font-size:19px;letter-spacing:-.03em;color:var(--purple)}
+.nav-links{display:none;gap:26px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+.nav-links a:hover{color:var(--purple)}
+.nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--purple);color:#fff;font-size:13px;font-weight:600;padding:11px 18px;border-radius:100px;white-space:nowrap}
+@media(min-width:900px){.nav-in{height:76px}.nav-links{display:flex}}
+
+/* ---------- botões ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--sans);
+  font-size:15px;font-weight:600;padding:16px 28px;border-radius:100px;border:2px solid transparent;transition:.18s;cursor:pointer}
+.btn-p{background:var(--purple);color:#fff}
+.btn-p:hover{background:var(--purple-d)}
+.btn-c{background:var(--coral);color:#fff}
+.btn-c:hover{background:var(--coral-d)}
+.btn-w{background:#fff;color:var(--purple)}
+.btn-o{border-color:currentColor}
+.btn-o:hover{background:rgba(255,255,255,.12)}
+.btns{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+@media(min-width:600px){.btns{flex-direction:row;flex-wrap:wrap;align-items:center}}
+
+/* ---------- hero ---------- */
+.hero{padding:52px 0 78px}
+.hero-grid{display:grid;gap:44px}
+@media(min-width:960px){.hero{padding:70px 0 120px}.hero-grid{grid-template-columns:1.08fr .92fr;gap:60px;align-items:center}}
+.hero-photo{position:relative;max-width:440px;margin:0 auto}
+.hero-photo img{border-radius:190px 190px 26px 26px;aspect-ratio:4/5;object-fit:cover;object-position:22% top}
+.badge{position:absolute;background:var(--coral);color:#fff;border-radius:100px;
+  padding:13px 20px;font-size:12.5px;font-weight:600;line-height:1.25;box-shadow:0 14px 34px rgba(251,71,52,.3)}
+.badge-tl{top:14px;left:-6px;transform:rotate(-4deg)}
+.stats{display:flex;flex-wrap:wrap;gap:26px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+.stat b{display:block;font-family:var(--serif);font-weight:800;font-size:30px;line-height:1;letter-spacing:-.03em;color:var(--purple)}
+.stat span{font-size:12.5px;color:var(--ink50);display:block;margin-top:5px}
+
+/* ---------- blocos de cor ---------- */
+.blk-p{background:var(--purple);color:#fff}
+.blk-c{background:var(--coral);color:#fff}
+.blk-w{background:#fff}
+.blk-p .lede,.blk-c .lede{color:rgba(255,255,255,.86)}
+.blk-p .eyebrow{color:rgba(255,255,255,.62)}
+.blk-c .eyebrow{color:rgba(255,255,255,.72)}
+
+/* ---------- listas de dor ---------- */
+.pains{display:grid;gap:1px;margin-top:44px;background:rgba(255,255,255,.16);border-radius:20px;overflow:hidden}
+@media(min-width:760px){.pains{grid-template-columns:1fr 1fr}}
+.pain{background:var(--purple);padding:26px 24px}
+.pain b{display:block;font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.02em;margin-bottom:7px}
+.pain p{font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.5}
+
+/* ---------- critérios ---------- */
+.crit{display:grid;gap:14px;margin-top:44px;counter-reset:c}
+@media(min-width:860px){.crit{grid-template-columns:repeat(3,1fr)}}
+.crit>div{background:var(--warm);border:1px solid var(--line);border-radius:22px;padding:28px 24px;counter-increment:c}
+.crit>div::before{content:counter(c,decimal-leading-zero);display:block;font-family:var(--serif);font-weight:800;
+  font-size:34px;letter-spacing:-.04em;color:var(--coral);line-height:1;margin-bottom:14px}
+.crit h3{margin-bottom:8px}
+.crit p{font-size:14.5px;color:var(--ink70)}
+
+/* ---------- semana ---------- */
+.week{display:grid;gap:12px;margin-top:44px}
+@media(min-width:760px){.week{grid-template-columns:repeat(2,1fr)}}
+.wk{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start;
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 22px 22px 18px}
+.wk .n{width:52px;height:52px;border-radius:15px;background:var(--purple);color:#fff;display:grid;place-items:center;
+  font-family:var(--serif);font-weight:800;font-size:15px;letter-spacing:-.02em;text-align:center;line-height:1.05}
+.wk b{display:block;font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:5px}
+.wk p{font-size:14px;color:var(--ink70);line-height:1.5}
+
+/* ---------- depoimentos ---------- */
+.quotes{display:grid;gap:16px;margin-top:44px}
+@media(min-width:860px){.quotes{grid-template-columns:repeat(3,1fr)}}
+.q{background:#fff;border-radius:24px;padding:28px 26px;box-shadow:0 16px 44px rgba(119,1,78,.08);align-self:start}
+.q .mark{font-family:var(--serif);font-size:56px;font-weight:900;color:var(--coral);line-height:.6;display:block;margin-bottom:12px}
+.q p{font-size:14.5px;color:var(--ink70);line-height:1.6}
+.q .who{display:flex;align-items:center;gap:11px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.q .av{width:38px;height:38px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;flex:none}
+.q .who b{font-size:13.5px;font-weight:600;display:block}
+.q .who span{font-size:12px;color:var(--ink50)}
+
+/* ---------- filtro ---------- */
+.filter{display:grid;gap:16px;margin-top:44px}
+@media(min-width:800px){.filter{grid-template-columns:1fr 1fr;gap:20px}}
+.fcol{border-radius:24px;padding:30px 26px}
+.f-no{background:rgba(20,9,15,.045);border:1px solid var(--line)}
+.f-yes{background:var(--purple);color:#fff}
+.fcol h3{margin-bottom:18px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.fcol li{display:grid;grid-template-columns:22px 1fr;gap:11px;font-size:14.5px;line-height:1.5}
+.f-no li{color:var(--ink50)}
+.f-yes li{color:rgba(255,255,255,.88)}
+.ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none;margin-top:1px}
+.f-no .ic{background:rgba(20,9,15,.1);color:var(--ink50)}
+.f-yes .ic{background:var(--coral);color:#fff}
+
+/* ---------- caminhos ---------- */
+.paths{display:grid;gap:14px;margin-top:44px}
+@media(min-width:900px){.paths{grid-template-columns:repeat(3,1fr)}}
+.path{background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px 26px;display:flex;flex-direction:column}
+.path.feat{border:2px solid var(--purple);position:relative}
+.path.feat::after{content:"MAIS ESCOLHIDO";position:absolute;top:-11px;left:26px;background:var(--purple);color:#fff;
+  font-size:9.5px;font-weight:700;letter-spacing:.14em;padding:5px 12px;border-radius:100px}
+.path .tag{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:10px}
+.path h3{margin-bottom:10px}
+.path p{font-size:14px;color:var(--ink70);line-height:1.55}
+.path ul{list-style:none;margin:18px 0 22px;display:flex;flex-direction:column;gap:9px}
+.path li{font-size:13.5px;color:var(--ink70);display:grid;grid-template-columns:16px 1fr;gap:9px}
+.path li::before{content:"→";color:var(--coral);font-weight:700}
+.path .btn{margin-top:auto;width:100%}
+
+/* ---------- nivelamento ---------- */
+.lvl{border-radius:30px;padding:44px 28px;text-align:center}
+@media(min-width:800px){.lvl{padding:64px 48px}}
+.dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.34)}
+.dots i:first-child{background:#fff;width:28px;border-radius:100px}
+
+/* ---------- faq ---------- */
+.faq{margin-top:44px;max-width:780px}
+.faq details{border-bottom:1px solid var(--line);padding:22px 0}
+.faq summary{font-family:var(--serif);font-size:clamp(17px,3.6vw,21px);font-weight:700;letter-spacing:-.02em;
+  cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--coral);font-size:26px;line-height:1;font-weight:400;flex:none}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin-top:13px;font-size:14.5px;color:var(--ink70);max-width:62ch}
+
+/* ---------- footer ---------- */
+.foot{background:var(--purple);color:#fff;padding:64px 0 34px}
+.foot-grid{display:grid;gap:34px}
+@media(min-width:760px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr}}
+.foot h4{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:14px}
+.foot ul{list-style:none;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.foot a{color:rgba(255,255,255,.8)}
+.foot a:hover{color:#fff}
+.foot-bot{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.14);
+  font-size:12px;color:rgba(255,255,255,.5);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav"><div class="wrap nav-in">
+  <a href="#topo" class="logo">Hey Teacher Gabs</a>
+  <div class="nav-links">
+    <a href="#dor">O problema</a>
+    <a href="#metodo">O método</a>
+    <a href="#resultados">Resultados</a>
+    <a href="#caminhos">Caminhos</a>
+    <a href="#duvidas">Dúvidas</a>
+  </div>
+  <a href="#nivelamento" class="nav-cta">Descobrir meu nível</a>
+</div></nav>
+
+<!-- HERO -->
+<header id="topo" class="hero"><div class="wrap hero-grid">
+  <div>
+    <span class="eyebrow" style="color:var(--coral)">Aulas de conversação para adultos</span>
+    <h1 class="h1" style="margin-top:16px">
+      Você entende inglês.<br>
+      Agora vamos fazer<br>
+      você <span class="script" style="color:var(--purple);font-size:1.12em">falar</span>.
+    </h1>
+    <p class="lede" style="margin-top:22px;color:var(--ink70)">
+      Aulas focadas em conversação para quem trava na hora de falar, mesmo entendendo quase tudo.
+    </p>
+    <div class="btns" style="margin-top:30px">
+      <a href="#nivelamento" class="btn btn-p">Descobrir meu nível de graça</a>
+      <a href="#caminhos" class="btn btn-o" style="color:var(--purple)">Ver os caminhos</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>200+</b><span>alunos atendidos</span></div>
+      <div class="stat"><b>75min</b><span>de aula por semana</span></div>
+      <div class="stat"><b>até 6</b><span>alunos por turma</span></div>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <img src="https://heyteachergabs.com.br/_astro/gabs-1.B9LnrjPe_Z1cpmsL.jpg" alt="Teacher Gabs durante uma aula online">
+    <span class="badge badge-tl">Let's bora!</span>
+  </div>
+</div></header>
+
+<!-- DOR -->
+<section id="dor" class="sec blk-p"><div class="wrap">
+  <span class="eyebrow">O problema de verdade</span>
+  <h2 class="h2" style="margin-top:14px">
+    Na hora de falar,<br>o cérebro <span class="script" style="color:var(--coral);font-size:1.14em">apaga</span>.
+  </h2>
+  <p class="lede" style="margin-top:22px;font-size:clamp(16px,4vw,20px)">
+    Você assiste série, entende reunião, lê e-mail sem esforço. Mas quando chega a sua vez de falar, some tudo.
+  </p>
+  <div class="pains">
+    <div class="pain"><b>Trava na conversa</b><p>Você sabe a resposta. Ela simplesmente não sai da boca.</p></div>
+    <div class="pain"><b>Foge das situações</b><p>Deixa a call para o colega, evita a reunião, some na viagem.</p></div>
+    <div class="pain"><b>Medo de errar</b><p>Vergonha do sotaque e pavor de falar errado na frente dos outros.</p></div>
+    <div class="pain"><b>Depende de alguém</b><p>Sempre precisa de um tradutor ou de outra pessoa para resolver.</p></div>
+  </div>
+</div></section>
+
+<!-- REFRAME -->
+<section class="sec blk-w"><div class="wrap">
+  <span class="eyebrow" style="color:var(--coral)">Por que isso acontece</span>
+  <h2 class="h2" style="margin-top:14px;max-width:16ch">
+    Não é falta de inglês.<br>É falta de <span class="script" style="color:var(--purple);font-size:1.12em">prática de fala</span>.
+  </h2>
+  <p class="lede" style="margin-top:24px;color:var(--ink70);font-size:clamp(16px,4vw,20px);max-width:56ch">
+    A gente passa a vida <b style="font-weight:600;color:var(--ink)">consumindo</b> inglês: série, música, texto, vídeo. Mas quase nunca é
+    <b style="font-weight:600;color:var(--ink)">treinado a produzir</b>. Aí o repertório está lá dentro e não tem caminho pronto para sair.
+  </p>
+  <p class="lede" style="margin-top:18px;color:var(--ink70);font-size:clamp(16px,4vw,20px);max-width:56ch">
+    Por isso mais gramática não resolve. O que resolve é falar, errar e falar de novo, com alguém do lado corrigindo na hora.
+  </p>
+</div></section>
+
+<!-- CRITÉRIOS -->
+<section id="metodo" class="sec" style="background:var(--warm)"><div class="wrap">
+  <span class="eyebrow" style="color:var(--coral)">O método</span>
+  <h2 class="h2" style="margin-top:14px;max-width:18ch">Três coisas que toda aula minha precisa ter.</h2>
+  <div class="crit">
+    <div><h3 class="h3">Você fala desde o primeiro dia</h3><p>Nada de esperar "ter base". A aula inteira é conversa em situação real: reunião, entrevista, aeroporto, papo do dia a dia.</p></div>
+    <div><h3 class="h3">Turma pequena de verdade</h3><p>No máximo 6 pessoas. Não existe se esconder no fundo da sala, e todo mundo fala em todas as aulas.</p></div>
+    <div><h3 class="h3">Rotina entre uma aula e outra</h3><p>Calendário de imersão no Trello com tarefa curta diária. É o que faz a evolução acontecer nos outros 6 dias da semana.</p></div>
+  </div>
+</div></section>
+
+<!-- SEMANA -->
+<section class="sec blk-w"><div class="wrap">
+  <span class="eyebrow" style="color:var(--coral)">Como é na prática</span>
+  <h2 class="h2" style="margin-top:14px;max-width:15ch">A sua semana como HeyStudent.</h2>
+  <div class="week">
+    <div class="wk"><span class="n">75<br>min</span><div><b>A aula ao vivo</b><p>Uma vez por semana, no Zoom, horário fixo da turma. Conversa do início ao fim.</p></div></div>
+    <div class="wk"><span class="n">15<br>min</span><div><b>A tarefa do dia</b><p>Calendário de imersão no Trello. Curto o suficiente para caber em qualquer rotina.</p></div></div>
+    <div class="wk"><span class="n">24<br>/7</span><div><b>A comunidade</b><p>Grupo de HeyStudents no WhatsApp e canal direto comigo para dúvidas.</p></div></div>
+    <div class="wk"><span class="n">a<br>cada 3</span><div><b>A cápsula do tempo</b><p>A cada 3 meses você grava um vídeo. É como você enxerga o quanto evoluiu.</p></div></div>
+  </div>
+</div></section>
+
+<!-- RESULTADOS -->
+<section id="resultados" class="sec blk-c"><div class="wrap">
+  <span class="eyebrow">Resultados</span>
+  <h2 class="h2" style="margin-top:14px;max-width:16ch">Quem já passou por aqui <span class="script" style="font-size:1.14em">conta</span>.</h2>
+  <div class="quotes">
+    <div class="q"><span class="mark">"</span>
+      <p>Eu já entendia inglês, mas não conseguia falar nada com ninguém. Quando eu entendi que tá tudo bem errar, tudo mudou. Fiz a primeira reunião sozinha em inglês e isso me levou a uma promoção.</p>
+      <div class="who"><span class="av">S</span><div><b>Stephane Oliveira</b><span>Aulas em grupo</span></div></div>
+    </div>
+    <div class="q"><span class="mark">"</span>
+      <p>Contei que ia fazer macarrão do zero e não travei. Consegui falar meia hora sobre macarrão, fazer perguntas, foi bem legal. A evolução foi bastante em um mês só.</p>
+      <div class="who"><span class="av">P</span><div><b>Paola Arens</b><span>Aulas individuais</span></div></div>
+    </div>
+    <div class="q"><span class="mark">"</span>
+      <p>Foi a primeira vez que eu consegui falar inglês. Errei bastante, mas foi muito gostoso. É a primeira vez que faço uma aula que me dá aquele sentimento de cara, eu consigo!</p>
+      <div class="who"><span class="av">J</span><div><b>Jéssica Mendes</b><span>Primeira aula em grupo</span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- FILTRO -->
+<section class="sec" style="background:var(--warm)"><div class="wrap">
+  <span class="eyebrow" style="color:var(--coral)">Sinceridade antes de tudo</span>
+  <h2 class="h2" style="margin-top:14px;max-width:17ch">Isso aqui não é para todo mundo.</h2>
+  <div class="filter">
+    <div class="fcol f-no">
+      <h3 class="h3">Não é para você se</h3>
+      <ul>
+        <li><span class="ic">✕</span>Você quer aprender inglês do zero, sem saber nenhuma palavra</li>
+        <li><span class="ic">✕</span>Você procura um curso para assistir no seu tempo, sem hora marcada</li>
+        <li><span class="ic">✕</span>Você não tem 15 minutos por dia para a rotina de imersão</li>
+        <li><span class="ic">✕</span>Você quer certificado e prova, mas não quer abrir a boca</li>
+      </ul>
+    </div>
+    <div class="fcol f-yes">
+      <h3 class="h3">É para você se</h3>
+      <ul>
+        <li><span class="ic">✓</span>Você entende bastante coisa, mas trava na hora de falar</li>
+        <li><span class="ic">✓</span>Você precisa do inglês no trabalho, em viagem ou numa entrevista</li>
+        <li><span class="ic">✓</span>Você topa errar em voz alta para destravar mais rápido</li>
+        <li><span class="ic">✓</span>Você quer alguém acompanhando de perto, não um vídeo gravado</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- CAMINHOS -->
+<section id="caminhos" class="sec blk-w"><div class="wrap">
+  <span class="eyebrow" style="color:var(--coral)">Os caminhos</span>
+  <h2 class="h2" style="margin-top:14px;max-width:16ch">Três jeitos de começar comigo.</h2>
+  <p class="lede" style="margin-top:18px;color:var(--ink70)">O nivelamento diz qual faz mais sentido para o seu momento.</p>
+  <div class="paths">
+    <div class="path">
+      <span class="tag">Comece sozinho</span>
+      <h3 class="h3">Inglês Pra Viajar</h3>
+      <p>Curso gravado e direto ao ponto, para você se virar sozinho em check-in, imigração, hotel e restaurante.</p>
+      <ul><li>Acesso vitalício</li><li>Comunidade HeyStudents</li><li>Aula bônus mensal</li></ul>
+      <a href="/ingles-pra-viajar" class="btn btn-o" style="color:var(--purple)">Conhecer o IPV</a>
+    </div>
+    <div class="path feat">
+      <span class="tag">Mais escolhido</span>
+      <h3 class="h3">Turma em grupo</h3>
+      <p>Até 6 alunos, uma aula de 75 minutos por semana, com rotina de imersão e acompanhamento próximo.</p>
+      <ul><li>Turma do seu nível</li><li>Trello com tarefa diária</li><li>Gravações na Kiwify</li><li>Canal direto comigo</li></ul>
+      <a href="#nivelamento" class="btn btn-p">Descobrir meu nível</a>
+    </div>
+    <div class="path">
+      <span class="tag">Vagas limitadas</span>
+      <h3 class="h3">Individual</h3>
+      <p>Só você e eu, com o conteúdo montado em cima do seu objetivo e da sua agenda.</p>
+      <ul><li>Aula 100% personalizada</li><li>Horário combinado</li><li>Remarcação com aviso prévio</li></ul>
+      <a href="#nivelamento" class="btn btn-o" style="color:var(--purple)">Ver disponibilidade</a>
+    </div>
+  </div>
+</div></section>
+
+<!-- NIVELAMENTO -->
+<section id="nivelamento" class="sec" style="background:var(--warm)"><div class="wrap">
+  <div class="lvl blk-p">
+    <div class="dots"><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="eyebrow">Teste gratuito de 5 minutos</span>
+    <h2 class="h2" style="margin-top:14px;max-width:20ch;margin-inline:auto">
+      Antes de falar de preço,<br>vamos descobrir <span class="script" style="color:var(--coral);font-size:1.14em">onde você está</span>.
+    </h2>
+    <p class="lede" style="margin-top:20px;margin-inline:auto;max-width:48ch">
+      Um teste rápido no celular que mostra o seu nível real de conversação e qual caminho faz sentido para você agora.
+      Resultado na hora, sem cadastro para ler.
+    </p>
+    <div class="btns" style="justify-content:center;margin-top:30px">
+      <a href="/nivelamento" class="btn btn-c">Começar o teste</a>
+      <a href="https://gabs.fqsc.com.br/cora" class="btn btn-o" style="color:#fff">Prefiro falar no WhatsApp</a>
+    </div>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section id="duvidas" class="sec blk-w"><div class="wrap">
+  <span class="eyebrow" style="color:var(--coral)">Dúvidas</span>
+  <h2 class="h2" style="margin-top:14px">Ainda tem alguma pergunta?</h2>
+  <div class="faq">
+    <details open><summary>Meu inglês é muito ruim. Consigo acompanhar?</summary>
+      <p>Se você entende alguma coisa e trava na fala, sim. O nivelamento existe justamente para te colocar numa turma do seu nível. Só quem está começando do absoluto zero entra em lista de espera, porque precisa de uma turma que comece junto.</p></details>
+    <details><summary>E se eu faltar a uma aula?</summary>
+      <p>A aula fica gravada na Kiwify. Além disso, na semana em que você perder a sua, pode participar de outra turma se houver vaga. É só combinar comigo antes.</p></details>
+    <details><summary>Quanto tempo até eu destravar?</summary>
+      <p>Depende do seu ponto de partida e da rotina que você mantém. A maioria dos alunos relata a primeira conversa fluida entre o primeiro e o terceiro mês. A cápsula do tempo a cada 3 meses serve para você mesmo comparar.</p></details>
+    <details><summary>Preciso ter horário fixo?</summary>
+      <p>Na turma em grupo, sim: cada turma tem o seu horário. No individual a gente combina junto. E dá para trocar de turma a qualquer momento havendo disponibilidade.</p></details>
+    <details><summary>Como funciona o pagamento?</summary>
+      <p>Existe uma taxa de matrícula única e depois o pacote, que pode ser mensal ou semestral, no pix, boleto ou cartão. Os valores eu passo no papo depois do nivelamento, porque mudam conforme a modalidade.</p></details>
+  </div>
+</div></section>
+
+<!-- CTA FINAL -->
+<section class="sec blk-c"><div class="wrap" style="text-align:center">
+  <h2 class="h2" style="max-width:18ch;margin-inline:auto">
+    Você já entende inglês.<br>Falta só <span class="script" style="font-size:1.14em">soltar a voz</span>.
+  </h2>
+  <p class="lede" style="margin-top:20px;margin-inline:auto;max-width:44ch">
+    Comece pelo teste de nível. São 5 minutos e ele já te diz o próximo passo.
+  </p>
+  <div class="btns" style="justify-content:center;margin-top:28px">
+    <a href="/nivelamento" class="btn btn-w">Fazer o teste de nível</a>
+    <a href="https://gabs.fqsc.com.br/cora" class="btn btn-o" style="color:#fff">Falar comigo no WhatsApp</a>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="foot"><div class="wrap">
+  <div class="foot-grid">
+    <div>
+      <span class="logo" style="color:#fff;font-size:22px">Hey Teacher Gabs</span>
+      <p class="small" style="margin-top:12px;color:rgba(255,255,255,.7);max-width:34ch">
+        Aulas de inglês focadas em conversação para adultos que querem destravar a fala com confiança.
+      </p>
+    </div>
+    <div><h4>Navegação</h4><ul>
+      <li><a href="/sobre">Sobre</a></li><li><a href="/metodologia">Metodologia</a></li>
+      <li><a href="/resultados">Resultados</a></li><li><a href="/nivelamento">Nivelamento</a></li>
+      <li><a href="/contato">Contato</a></li></ul></div>
+    <div><h4>Produtos</h4><ul>
+      <li><a href="/ingles-pra-viajar">Inglês Pra Viajar</a></li>
+      <li><a href="/contato">Aulas individuais</a></li>
+      <li><a href="/contato">Aulas em grupo</a></li></ul></div>
+  </div>
+  <div class="foot-bot">
+    <span>© 2026 Hey Teacher Gabs. Todos os direitos reservados.</span>
+    <a href="/politica-de-privacidade">Política de privacidade</a>
+  </div>
+</div></footer>
+
+</body>
+</html>
