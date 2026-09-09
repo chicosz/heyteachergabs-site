@@ -81,6 +81,23 @@ input,textarea{font:inherit;color:inherit}
 .q-acoes{margin-top:20px;display:flex;flex-direction:column;gap:12px}
 @media(min-width:768px){.q-acoes{flex-direction:row;justify-content:flex-end}}
 
+/* analisando (interstício animado) */
+.q-anal{display:none;margin-top:22px}
+.q-anal.on{display:block;animation:q-in .3s ease}
+.q-anal-box{background:var(--ink);color:var(--cream);border:2px solid var(--ink);border-radius:20px;padding:22px 20px;box-shadow:6px 6px 0 var(--pri)}
+.q-anal-top{display:flex;align-items:center;gap:12px}
+.q-spin{flex:none;width:34px;height:34px;border-radius:50%;border:3px solid rgba(252,248,250,.25);border-top-color:var(--pri);animation:q-spin .8s linear infinite}
+@keyframes q-spin{to{transform:rotate(360deg)}}
+.q-anal-top h3{font-weight:800;font-size:18px;letter-spacing:-.4px;line-height:1.15}
+.q-anal-top h3 span{font-family:var(--round);color:var(--lite)}
+.q-anal-lista{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.q-anal-li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:center;font-weight:600;font-size:14.5px;opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;color:rgba(252,248,250,.55)}
+.q-anal-li.on{opacity:1;transform:none}
+.q-anal-li.ok{color:var(--cream)}
+.q-anal-li i{width:22px;height:22px;border-radius:50%;border:2px solid rgba(252,248,250,.35);display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;transition:background .25s,border-color .25s}
+.q-anal-li.ok i{background:var(--pri);border-color:var(--pri);color:var(--ink)}
+.q-anal-nota{margin-top:14px;font-weight:500;font-size:12.5px;color:rgba(252,248,250,.55)}
+
 /* resultado */
 .q-res{display:none}
 .q-res.on{display:block;animation:q-in .35s ease}
@@ -135,6 +152,13 @@ input,textarea{font:inherit;color:inherit}
 
     <!-- ETAPAS (geradas por JS) -->
     <div id="q-etapas"></div>
+
+    <!-- ANALISANDO -->
+    <div class="q-anal" id="q-anal"><div class="q-anal-box">
+      <div class="q-anal-top"><span class="q-spin"></span><h3>Montando o melhor caminho <span>pra você</span></h3></div>
+      <div class="q-anal-lista" id="q-anal-lista"></div>
+      <p class="q-anal-nota">Leva só alguns segundos.</p>
+    </div></div>
 
     <!-- RESULTADO -->
     <div class="q-res" id="q-res">
@@ -292,10 +316,33 @@ function avancar(){
     st.lvl={A:0,B:0,C:1,D:1,E:2}[st.resp.auto]||0;
   }
   st.idx++;
-  if(st.idx>=TOTAL){resultado();return}
+  if(st.idx>=TOTAL){analisando();return}
   render();
 }
 voltarBtn.addEventListener('click',function(){if(st.idx>0){st.idx--;render()}});
+
+/* ================= ROTAS: ajuste aqui sem mexer na lógica =================
+   Faixa C = inglês do zero (lista de espera)
+   Faixa A = pronto para turma: nível mínimo + prazo curto + consegue investir
+   Faixa B = todo o resto: entra na esteira pelo produto do objetivo
+*/
+var ROTAS={
+  nivelMinTurma:'A2',                       /* A1 ou abaixo nunca vai direto para turma */
+  investeParaTurma:['ate600','mais600'],    /* faixas de R$/mês que sustentam o semestral */
+  prazoCurto:['agora','mes'],
+  porObjetivo:{                             /* Faixa B: qual produto por objetivo */
+    viagem:    {tag:'Comece por aqui',t:'Inglês Pra Viajar',d:'Curso gravado, direto ao ponto, para você se virar sozinho em check-in, imigração, hotel e restaurante.'},
+    entrevista:{tag:'Comece por aqui',t:'You Are Hired',d:'Preparação focada em entrevista de emprego em inglês. Perguntas reais, respostas prontas para adaptar, e como se comunicar com confiança mesmo sem inglês perfeito.'},
+    trabalho:  {tag:'Comece por aqui',t:'Study Play: 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria o hábito antes de entrar numa turma.'},
+    geral:     {tag:'Comece por aqui',t:'Study Play: 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria o hábito antes de entrar numa turma.'}
+  },
+  faixaA:{
+    B2:{tag:'Pronto para a turma',t:'Turma avançada ou individual',d:'Você tem nível, prazo e espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para montar seu início.'},
+    padrao:function(n){return {tag:'Pronto para a turma',t:'Turma em grupo, nível '+n,d:'Você tem nível, prazo e espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para montar seu início.'}}
+  },
+  faixaC:{tag:'Lista de espera',t:'Turma iniciante do zero',d:'Turmas do zero abrem quando fecha um grupo inteiro começando junto. Enquanto isso, o Inglês Pra Viajar é o melhor primeiro contato.'}
+};
+var OBJ_LABEL={trabalho:'trabalho',entrevista:'entrevista de emprego',viagem:'viagem',geral:'confiança no geral'};
 
 /* ================= RESULTADO (calibrado para baixo) ================= */
 var DESC={
@@ -317,23 +364,29 @@ function calcNivel(){
   return 'ZERO';
 }
 function calcFaixa(nivel){
-  var r=st.resp,inv=r.invest,prazo=r.prazo;
   if(nivel==='ZERO')return 'C';
-  var podeInvestir=(inv==='ate600'||inv==='mais600');
-  var agora=(prazo==='agora'||prazo==='mes');
-  if(nivel!=='A1'&&podeInvestir&&agora)return 'A';
-  return 'B';
+  var r=st.resp;
+  var temNivel=NIVEIS.indexOf(nivel)>=NIVEIS.indexOf(ROTAS.nivelMinTurma);
+  var investe=ROTAS.investeParaTurma.indexOf(r.invest)>=0;
+  var curto=ROTAS.prazoCurto.indexOf(r.prazo)>=0;
+  return (temNivel&&investe&&curto)?'A':'B';
 }
 function caminho(nivel,faixa){
-  var o=st.resp.objetivo;
-  if(faixa==='C')return {tag:'Lista de espera',t:'Turma iniciante do zero',d:'Turmas do zero abrem quando fecha um grupo inteiro começando junto. Enquanto isso, o Inglês Pra Viajar é o melhor primeiro contato.'};
-  if(faixa==='A'){
-    var t=nivel==='B2'?'Turma avançada ou individual':'Turma em grupo, nível '+nivel;
-    return {tag:'Pronto para a turma',t:t,d:'Você tem nível, prazo e espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para montar seu início.'};
-  }
-  if(o==='viagem')return {tag:'Comece por aqui',t:'Inglês Pra Viajar',d:'Curso gravado, direto ao ponto, para você se virar sozinho em check-in, imigração, hotel e restaurante.'};
-  if(o==='entrevista')return {tag:'Comece por aqui',t:'You Are Hired',d:'Preparação focada em entrevista de emprego em inglês. Perguntas reais, respostas prontas para adaptar, e como se comunicar com confiança mesmo sem inglês perfeito.'};
-  return {tag:'Comece por aqui',t:'Study Play: 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria o hábito antes de entrar numa turma.'};
+  if(faixa==='C')return ROTAS.faixaC;
+  if(faixa==='A')return ROTAS.faixaA[nivel]||ROTAS.faixaA.padrao(nivel);
+  return ROTAS.porObjetivo[st.resp.objetivo]||ROTAS.porObjetivo.geral;
+}
+/* interstício: linhas aparecem uma a uma, depois mostra o resultado */
+function analisando(){
+  wrap.innerHTML='';voltarBtn.classList.remove('on');countEl.textContent='Analisando';
+  var lista=document.getElementById('q-anal-lista'),box=document.getElementById('q-anal');
+  var linhas=['Lendo suas '+N_ITENS+' respostas','Calibrando seu nível de conversação','Cruzando com seu objetivo: '+(OBJ_LABEL[st.resp.objetivo]||'geral'),'Considerando prazo e investimento','Escolhendo o melhor caminho'];
+  lista.innerHTML=linhas.map(function(l){return '<div class="q-anal-li"><i></i><span>'+l+'</span></div>'}).join('');
+  box.classList.add('on');window.scrollTo({top:0,behavior:'smooth'});
+  var els=lista.querySelectorAll('.q-anal-li'),passo=620;
+  els.forEach(function(e,i){setTimeout(function(){e.classList.add('on');barEl.style.width=(88+i*2.4)+'%'},i*passo);
+    setTimeout(function(){e.classList.add('ok');e.querySelector('i').textContent='✓'},i*passo+420)});
+  setTimeout(function(){box.classList.remove('on');resultado()},els.length*passo+500);
 }
 function resultado(){
   wrap.innerHTML='';voltarBtn.classList.remove('on');
