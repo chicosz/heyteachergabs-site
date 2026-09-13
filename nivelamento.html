@@ -98,6 +98,17 @@ input,textarea{font:inherit;color:inherit}
 .q-anal-li.ok i{background:var(--pri);border-color:var(--pri);color:var(--ink)}
 .q-anal-nota{margin-top:14px;font-weight:500;font-size:12.5px;color:rgba(252,248,250,.55)}
 
+[hidden]{display:none!important}
+.q-extras{margin-top:14px;display:grid;gap:10px}
+.q-extras-h{font-family:var(--round);font-weight:700;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dark)}
+.q-prod{background:var(--cream);border:2px solid var(--ink);border-radius:16px;padding:14px 16px;box-shadow:3px 3px 0 var(--ink);display:grid;gap:8px}
+.q-prod b{font-weight:800;font-size:16px;letter-spacing:-.3px}
+.q-prod p{font-weight:500;font-size:13.5px;line-height:1.45;color:rgba(28,15,22,.75)}
+.q-prod .q-btn,.q-res-cam .q-btn{min-height:48px;padding:13px 18px;font-size:11.5px;box-shadow:3px 3px 0 var(--ink)}
+.q-res-cam .q-acoes{margin-top:14px;justify-content:flex-start}
+.q-erro{margin-top:10px;font-weight:600;font-size:13px;color:#B42318}
+a.q-btn{text-decoration:none}
+
 /* resultado */
 .q-res{display:none}
 .q-res.on{display:block;animation:q-in .35s ease}
@@ -171,25 +182,29 @@ input,textarea{font:inherit;color:inherit}
         <span class="q-tag" id="r-camtag">Caminho recomendado</span>
         <h4 id="r-cam"></h4>
         <p id="r-camdesc"></p>
+        <div class="q-acoes" id="r-cambtn" hidden></div>
       </div>
+      <div class="q-extras" id="r-extras" hidden></div>
 
       <div class="q-form" id="q-form">
-        <h4>Quer o plano completo no WhatsApp?</h4>
-        <p>Eu te mando o diagnóstico detalhado, o que treinar primeiro e as turmas abertas do seu nível.</p>
+        <h4 id="f-h">Falar com a Gabs</h4>
+        <p id="f-p"></p>
         <div class="q-campos">
           <input class="q-campo" id="f-nome" type="text" placeholder="Seu nome" autocomplete="name">
           <input class="q-campo" id="f-whats" type="tel" placeholder="WhatsApp com DDD" autocomplete="tel">
-          <input class="q-campo full" id="f-email" type="email" placeholder="Seu melhor e-mail" autocomplete="email">
+          <input class="q-campo full" id="f-email" type="email" placeholder="Seu melhor e-mail (opcional)" autocomplete="email">
+          <textarea class="q-campo full" id="f-motivo" rows="3" placeholder="Em uma frase: por que você precisa do individual?" hidden></textarea>
         </div>
-        <div class="q-acoes"><button class="q-btn" id="f-enviar" type="button">Receber meu plano no WhatsApp</button></div>
+        <p class="q-erro" id="f-erro" hidden>Preencha seu nome e o WhatsApp com DDD para continuar.</p>
+        <div class="q-acoes"><button class="q-btn" id="f-enviar" type="button">Enviar</button></div>
         <p class="q-lgpd">Ao enviar você concorda com o tratamento dos seus dados conforme a Política de Privacidade. Nenhuma resposta é publicada.</p>
-        <div class="q-ok" id="f-ok">Recebido! Abrindo o WhatsApp da Gabs para você.</div>
+        <div class="q-ok" id="f-ok"></div>
       </div>
     </div>
   </div>
 </main>
 
-<p class="q-foot">Resultado na hora, sem cadastro obrigatório para ler. O cadastro só é pedido para você receber o plano.</p>
+<p class="q-foot">Resultado na hora, sem cadastro obrigatório para ler. O contato só é pedido no final, se você quiser seguir.</p>
 
 <script>
 (function(){
@@ -235,19 +250,25 @@ var PERFIL_INICIO=[
    {v:'trabalho',t:'Trabalho',s:'Reuniões, calls, e-mails, apresentações'},
    {v:'entrevista',t:'Entrevista de emprego',s:'Processo seletivo em inglês'},
    {v:'viagem',t:'Viagem',s:'Me virar sozinho fora do Brasil'},
-   {v:'geral',t:'Confiança no geral',s:'Parar de travar em qualquer situação'}]}
+   {v:'geral',t:'Confiança no geral',s:'Parar de travar em qualquer situação'}]},
+ {id:'formato',tag:'Seu formato',perg:'Alguma dessas situações é a sua?',ops:[
+   {v:'area',t:'Preciso do inglês para uma área específica',s:'Acadêmica, jurídica, saúde, tecnologia, pesquisa'},
+   {v:'fuso',t:'Moro fora ou meus horários não batem com turma',s:'Fuso diferente ou agenda imprevisível'},
+   {v:'vip',t:'Quero aula individual',s:'Atendimento só para mim'},
+   {v:'nao',t:'Nenhuma dessas'}]}
 ];
 var PERFIL_FIM=[
  {id:'producao',tag:'Agora é com você',perg:'Escreva 2 ou 3 frases em inglês respondendo: What do you do, and why do you want to speak English?',area:true,dica:'Não precisa estar perfeito. A Gabs lê isso pessoalmente para calibrar o seu nível. Pode pular se preferir.'},
  {id:'prazo',tag:'Quase lá',perg:'Quando você quer começar?',ops:[
-   {v:'agora',t:'Agora',s:'Já, se tiver turma'},
+   {v:'agora',t:'Agora',s:'Já, se tiver vaga'},
    {v:'mes',t:'Nas próximas semanas'},
-   {v:'depois',t:'Ainda estou pesquisando'}]},
+   {v:'depois',t:'Ainda estou só pesquisando'}]},
  {id:'invest',tag:'Última',perg:'Quanto você consegue investir por mês no seu inglês?',ops:[
    {v:'ate100',t:'Até R$ 100'},
    {v:'ate300',t:'Entre R$ 100 e R$ 300'},
    {v:'ate600',t:'Entre R$ 300 e R$ 600'},
-   {v:'mais600',t:'Mais de R$ 600'}]}
+   {v:'ate1000',t:'Entre R$ 600 e R$ 1.000'},
+   {v:'mais1000',t:'Mais de R$ 1.000'}]}
 ];
 
 /* ================= ESTADO ================= */
@@ -322,27 +343,34 @@ function avancar(){
 voltarBtn.addEventListener('click',function(){if(st.idx>0){st.idx--;render()}});
 
 /* ================= ROTAS: ajuste aqui sem mexer na lógica =================
-   Faixa C = inglês do zero (lista de espera)
-   Faixa A = pronto para turma: nível mínimo + prazo curto + consegue investir
-   Faixa B = todo o resto: entra na esteira pelo produto do objetivo
+   Ordem de decisão (a primeira regra que bater vence):
+   1. Individual       A1+ E tem motivo (área específica, fuso, pediu individual) E investe R$ 600+
+   2. Turma do zero    nível Zero. Pré-venda se investe R$ 300+, lista de espera se menos
+   3. Turma em grupo   A2+ E quer começar agora/próximas semanas E investe R$ 300+
+   4. Conversação      A2+ E investe R$ 100 a 300 (turma nova: até 12 pessoas, horário fixo)
+   5. Esteira          todo o resto: produto pelo objetivo (IPV, You Are Hired, Study Play)
 */
-var ROTAS={
-  nivelMinTurma:'A2',                       /* A1 ou abaixo nunca vai direto para turma */
-  investeParaTurma:['ate600','mais600'],    /* faixas de R$/mês que sustentam o semestral */
+var CFG={
+  nivelMinTurma:'A2',
+  investeTurma:['ate600','ate1000','mais1000'],
+  investeIndividual:['ate1000','mais1000'],
+  investeConversacao:['ate300'],
   prazoCurto:['agora','mes'],
-  porObjetivo:{                             /* Faixa B: qual produto por objetivo */
-    viagem:    {tag:'Comece por aqui',t:'Inglês Pra Viajar',d:'Curso gravado, direto ao ponto, para você se virar sozinho em check-in, imigração, hotel e restaurante.'},
-    entrevista:{tag:'Comece por aqui',t:'You Are Hired',d:'Preparação focada em entrevista de emprego em inglês. Perguntas reais, respostas prontas para adaptar, e como se comunicar com confiança mesmo sem inglês perfeito.'},
-    trabalho:  {tag:'Comece por aqui',t:'Study Play: 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria o hábito antes de entrar numa turma.'},
-    geral:     {tag:'Comece por aqui',t:'Study Play: 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria o hábito antes de entrar numa turma.'}
-  },
-  faixaA:{
-    B2:{tag:'Pronto para a turma',t:'Turma avançada ou individual',d:'Você tem nível, prazo e espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para montar seu início.'},
-    padrao:function(n){return {tag:'Pronto para a turma',t:'Turma em grupo, nível '+n,d:'Você tem nível, prazo e espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para montar seu início.'}}
-  },
-  faixaC:{tag:'Lista de espera',t:'Turma iniciante do zero',d:'Turmas do zero abrem quando fecha um grupo inteiro começando junto. Enquanto isso, o Inglês Pra Viajar é o melhor primeiro contato.'}
+  motivosIndividual:['area','fuso','vip'],
+  individualAberto:false,      /* false = agenda fechada: lista + conversa com a Gabs */
+  conversacaoAberta:false,     /* false = Turma de Conversação ainda é lista de interesse */
+  previsaoZero:'até 3 meses',
+  links:{ipv:'https://pay.kiwify.com.br/lcBJzro',yah:'',studyplay:''}
 };
+/* semLink: o que o botão faz enquanto o produto não tem link. whats = abre o WhatsApp da Gabs; form = leva ao formulário */
+var PRODUTOS={
+  ipv:{t:'Inglês Pra Viajar',d:'Curso gravado, direto ao ponto, para você se virar sozinho em check-in, imigração, hotel e restaurante.',btn:'Quero o Inglês Pra Viajar',link:'ipv',semLink:'whats'},
+  yah:{t:'You Are Hired',d:'Preparação para entrevista de emprego em inglês: perguntas reais, respostas prontas para adaptar e como falar com confiança mesmo sem inglês perfeito.',btn:'Quero o You Are Hired',link:'yah',semLink:'whats'},
+  studyplay:{t:'Study Play · 4 dias grátis',d:'Um calendário de imersão de um mês com os 4 primeiros dias liberados. É como você cria contato diário com o inglês sozinho.',btn:'Começar o Study Play',link:'studyplay',semLink:'form'}
+};
+var POR_OBJETIVO={viagem:'ipv',entrevista:'yah',trabalho:'studyplay',geral:'studyplay'};
 var OBJ_LABEL={trabalho:'trabalho',entrevista:'entrevista de emprego',viagem:'viagem',geral:'confiança no geral'};
+var FORMATO_LABEL={area:'inglês para área específica',fuso:'fuso ou horário',vip:'prefere individual',nao:'nenhum'};
 
 /* ================= RESULTADO (calibrado para baixo) ================= */
 var DESC={
@@ -363,36 +391,73 @@ function calcNivel(){
   if(st.acertos.A1>=1)return 'A1';
   return 'ZERO';
 }
-function calcFaixa(nivel){
-  if(nivel==='ZERO')return 'C';
-  var r=st.resp;
-  var temNivel=NIVEIS.indexOf(nivel)>=NIVEIS.indexOf(ROTAS.nivelMinTurma);
-  var investe=ROTAS.investeParaTurma.indexOf(r.invest)>=0;
-  var curto=ROTAS.prazoCurto.indexOf(r.prazo)>=0;
-  return (temNivel&&investe&&curto)?'A':'B';
-}
-function caminho(nivel,faixa){
-  if(faixa==='C')return ROTAS.faixaC;
-  if(faixa==='A')return ROTAS.faixaA[nivel]||ROTAS.faixaA.padrao(nivel);
-  return ROTAS.porObjetivo[st.resp.objetivo]||ROTAS.porObjetivo.geral;
+function rota(nivel){
+  var r=st.resp,ni=NIVEIS.indexOf(nivel);
+  var inv=function(a){return a.indexOf(r.invest)>=0};
+  var objKey=POR_OBJETIVO[r.objetivo]||'studyplay';
+  var temNivel=ni>=NIVEIS.indexOf(CFG.nivelMinTurma);
+  /* 1. individual: qualquer nível a partir de A1, desde que tenha motivo e verba */
+  if(ni>=0&&CFG.motivosIndividual.indexOf(r.formato)>=0&&inv(CFG.investeIndividual)){
+    var ab=CFG.individualAberto;
+    return {id:'individual',tag:'Individual',t:ab?'Aula individual':'Aula individual · lista da agenda',
+      d:ab?'Pelo que você contou, o individual faz sentido para você. O próximo passo é um papo rápido com a Gabs para montar o seu plano.'
+          :'Pelo que você contou, o individual pode fazer sentido para você. A agenda está fechada no momento: você entra na lista e a Gabs conversa com você para entender o seu caso.',
+      form:{h:'Conta para a Gabs o seu caso',p:'Ela lê antes de falar com você no WhatsApp.',btn:ab?'Falar com a Gabs':'Entrar na lista e falar com a Gabs',motivo:true,whats:true}};
+  }
+  /* 2. zero */
+  if(nivel==='ZERO'){
+    var extrasZero=['studyplay','ipv'];
+    if(inv(CFG.investeTurma))return {id:'zero_prevenda',tag:'Turma do zero',t:'Turma iniciante · garanta sua vaga',
+      d:'A turma do zero abre quando fecham 6 pessoas começando juntas, com previsão de início em '+CFG.previsaoZero+'. Garantindo a vaga agora, você entra nesse grupo.',
+      extras:extrasZero,extrasTitulo:'Enquanto a turma não começa',
+      form:{h:'Garanta sua vaga na turma do zero',p:'A Gabs fala com você no WhatsApp para combinar.',btn:'Garantir minha vaga',whats:true}};
+    return {id:'zero_lista',tag:'Turma do zero',t:'Lista da turma iniciante',
+      d:'A turma do zero abre quando fecham 6 pessoas começando juntas, com previsão de início em '+CFG.previsaoZero+'. Enquanto isso, comece a criar contato com o inglês sozinho.',
+      extras:extrasZero,extrasTitulo:'Enquanto a turma não abre',
+      form:{h:'Entrar na lista da turma do zero',p:'Você recebe um aviso quando a turma abrir.',btn:'Entrar na lista',ok:'Pronto! Você está na lista da turma do zero. A Gabs avisa no seu WhatsApp quando abrir.',whats:false}};
+  }
+  /* 3. turma em grupo */
+  if(temNivel&&CFG.prazoCurto.indexOf(r.prazo)>=0&&inv(CFG.investeTurma)){
+    return {id:'turma_'+nivel,tag:'Pronto para a turma',t:nivel==='B2'?'Turma avançada':'Turma em grupo · nível '+nivel,
+      d:'Você tem nível, quer começar logo e tem espaço para investir. O próximo passo é um papo de 15 minutos com a Gabs para escolher sua turma.',
+      form:{h:'Falar com a Gabs',p:'Ela já recebe seu nível e seu objetivo na mensagem.',btn:'Falar com a Gabs no WhatsApp',whats:true}};
+  }
+  /* 4. turma de conversação */
+  if(temNivel&&inv(CFG.investeConversacao)){
+    var ca=CFG.conversacaoAberta;
+    return {id:'conversacao',tag:ca?'Turma de Conversação':'Em breve',t:ca?'Turma de Conversação':'Turma de Conversação · lista de interesse',
+      d:'Uma turma só de conversação, maior e com valor mais acessível que a turma regular, em horário fixo. '+(ca?'O próximo passo é ver se o horário da turma funciona para você.':'Ainda não abriu: quem entra na lista fica sabendo primeiro.'),
+      extras:[objKey],extrasTitulo:'Enquanto isso',
+      form:ca?{h:'Falar com a Gabs',p:'Ela te passa os horários da turma.',btn:'Ver horários no WhatsApp',whats:true}
+             :{h:'Entrar na lista da Turma de Conversação',p:'Você recebe um aviso quando abrir.',btn:'Entrar na lista',ok:'Pronto! Você está na lista da Turma de Conversação. A Gabs avisa no seu WhatsApp quando abrir.',whats:false}};
+  }
+  /* 5. esteira */
+  return {id:'esteira_'+objKey,tag:'Comece por aqui',t:PRODUTOS[objKey].t,d:PRODUTOS[objKey].d,produto:objKey,
+    form:{h:'Quer saber quando abrir turma para o seu nível?',p:'Deixe seu contato e a Gabs te avisa.',btn:'Me avisa',ok:'Pronto! A Gabs avisa no seu WhatsApp quando abrir turma para o seu nível.',whats:false}};
 }
 /* interstício: linhas aparecem uma a uma, depois mostra o resultado */
 function analisando(){
   wrap.innerHTML='';voltarBtn.classList.remove('on');countEl.textContent='Analisando';
   var lista=document.getElementById('q-anal-lista'),box=document.getElementById('q-anal');
-  var linhas=['Lendo suas '+N_ITENS+' respostas','Calibrando seu nível de conversação','Cruzando com seu objetivo: '+(OBJ_LABEL[st.resp.objetivo]||'geral'),'Considerando prazo e investimento','Escolhendo o melhor caminho'];
+  var linhas=['Lendo suas '+N_ITENS+' respostas','Calibrando seu nível de conversação','Cruzando com seu objetivo: '+(OBJ_LABEL[st.resp.objetivo]||'geral'),'Vendo o formato que combina com você','Considerando quando quer começar e quanto quer investir','Escolhendo o melhor caminho'];
   lista.innerHTML=linhas.map(function(l){return '<div class="q-anal-li"><i></i><span>'+l+'</span></div>'}).join('');
   box.classList.add('on');window.scrollTo({top:0,behavior:'smooth'});
-  var els=lista.querySelectorAll('.q-anal-li'),passo=620;
-  els.forEach(function(e,i){setTimeout(function(){e.classList.add('on');barEl.style.width=(88+i*2.4)+'%'},i*passo);
-    setTimeout(function(){e.classList.add('ok');e.querySelector('i').textContent='✓'},i*passo+420)});
+  var els=lista.querySelectorAll('.q-anal-li'),passo=560;
+  els.forEach(function(e,i){setTimeout(function(){e.classList.add('on');barEl.style.width=(86+i*2.3)+'%'},i*passo);
+    setTimeout(function(){e.classList.add('ok');e.querySelector('i').textContent='✓'},i*passo+400)});
   setTimeout(function(){box.classList.remove('on');resultado()},els.length*passo+500);
+}
+function prodBtn(key,cls){
+  var p=PRODUTOS[key],href=CFG.links[p.link],c='q-btn'+(cls?' '+cls:'');
+  if(href)return '<a class="'+c+'" href="'+href+'" target="_blank" rel="noopener">'+p.btn+'</a>';
+  if(p.semLink==='whats')return '<button class="'+c+'" type="button" data-whats-prod="'+key+'">'+p.btn+'</button>';
+  return '<button class="'+c+'" type="button" data-form="1">Me avisa quando liberar</button>';
 }
 function resultado(){
   wrap.innerHTML='';voltarBtn.classList.remove('on');
   barEl.style.width='100%';countEl.textContent='Resultado';
-  var nivel=calcNivel(),faixa=calcFaixa(nivel),cam=caminho(nivel,faixa),d=DESC[nivel];
-  st.resultado={nivel:nivel,faixa:faixa,caminho:cam.t};
+  var nivel=calcNivel(),cam=rota(nivel),d=DESC[nivel];
+  st.cam=cam;st.resultado={nivel:nivel,destino:cam.id,caminho:cam.t};
   document.getElementById('r-badge').textContent=nivel==='ZERO'?'0':nivel;
   document.getElementById('r-titulo').textContent=d.t;
   document.getElementById('r-desc').textContent=d.d;
@@ -400,6 +465,17 @@ function resultado(){
   document.getElementById('r-camtag').textContent=cam.tag;
   document.getElementById('r-cam').textContent=cam.t;
   document.getElementById('r-camdesc').textContent=cam.d;
+  var cb=document.getElementById('r-cambtn');
+  if(cam.produto){cb.innerHTML=prodBtn(cam.produto);cb.hidden=false}else{cb.innerHTML='';cb.hidden=true}
+  var ex=document.getElementById('r-extras');
+  if(cam.extras&&cam.extras.length){
+    ex.innerHTML='<span class="q-extras-h">'+cam.extrasTitulo+'</span>'+cam.extras.map(function(k){var pr=PRODUTOS[k];return '<div class="q-prod"><b>'+pr.t+'</b><p>'+pr.d+'</p><div>'+prodBtn(k,'ghost')+'</div></div>'}).join('');
+    ex.hidden=false;
+  }else{ex.innerHTML='';ex.hidden=true}
+  document.getElementById('f-h').textContent=cam.form.h;
+  document.getElementById('f-p').textContent=cam.form.p;
+  document.getElementById('f-enviar').textContent=cam.form.btn;
+  document.getElementById('f-motivo').hidden=!cam.form.motivo;
   document.getElementById('q-res').classList.add('on');
   try{localStorage.setItem('htgNivelamento',JSON.stringify(payload()))}catch(e){}
   window.scrollTo({top:0,behavior:'smooth'});
@@ -407,29 +483,43 @@ function resultado(){
 
 /* ================= CAPTURA ================= */
 function cookie(n){var m=document.cookie.split('; ').find(function(c){return c.indexOf(n+'=')===0});return m?decodeURIComponent(m.split('=')[1]):null}
+function val(id){return (document.getElementById(id).value||'').trim()}
 function payload(){
-  var u=new URLSearchParams(location.search),p={
-    nivel:st.resultado?st.resultado.nivel:null,faixa:st.resultado?st.resultado.faixa:null,caminho:st.resultado?st.resultado.caminho:null,
-    autodeclarado:st.resp.auto,objetivo:st.resp.objetivo,prazo:st.resp.prazo,investimento:st.resp.invest,producao:st.resp.producao||'',
-    acertos:st.acertos,vistos:st.vistos,itens:st.itens,
-    nome:(document.getElementById('f-nome').value||'').trim(),whatsapp:(document.getElementById('f-whats').value||'').trim(),email:(document.getElementById('f-email').value||'').trim(),
+  var u=new URLSearchParams(location.search);
+  return {
+    nivel:st.resultado?st.resultado.nivel:null,destino:st.resultado?st.resultado.destino:null,caminho:st.resultado?st.resultado.caminho:null,
+    autodeclarado:st.resp.auto,objetivo:st.resp.objetivo,formato:st.resp.formato,prazo:st.resp.prazo,investimento:st.resp.invest,producao:st.resp.producao||'',
+    motivo_individual:val('f-motivo'),acertos:st.acertos,vistos:st.vistos,itens:st.itens,
+    nome:val('f-nome'),whatsapp:val('f-whats'),email:val('f-email'),
     lead_id:cookie('lead_id'),sck:cookie('sck')||u.get('sck'),
     utm_source:cookie('utm_source')||u.get('utm_source'),utm_medium:cookie('utm_medium')||u.get('utm_medium'),utm_campaign:cookie('utm_campaign')||u.get('utm_campaign'),utm_content:cookie('utm_content')||u.get('utm_content'),
     pagina:location.href,criado_em:new Date().toISOString()
-  };return p;
-}
-document.getElementById('f-enviar').addEventListener('click',function(){
-  var p=payload();
-  if(!p.nome||!p.whatsapp){alert('Preenche pelo menos nome e WhatsApp.');return}
-  var btn=this;btn.disabled=true;
-  var ep=root.getAttribute('data-endpoint'),key=root.getAttribute('data-apikey');
-  var done=function(){
-    document.getElementById('f-ok').classList.add('on');
-    var wa=root.getAttribute('data-whatsapp')||'';
-    var msg='Oi Gabs! Fiz o teste de nível: '+p.nivel+'. Objetivo: '+p.objetivo+'. Quero receber meu plano.';
-    if(wa.indexOf('wa.me')>=0)wa+=(wa.indexOf('?')>=0?'&':'?')+'text='+encodeURIComponent(msg);
-    setTimeout(function(){if(wa)location.href=wa},900);
   };
+}
+function abrirWhats(msg){
+  var wa=root.getAttribute('data-whatsapp')||'';if(!wa)return;
+  if(wa.indexOf('wa.me')>=0)wa+=(wa.indexOf('?')>=0?'&':'?')+'text='+encodeURIComponent(msg);
+  location.href=wa;
+}
+document.getElementById('q-res').addEventListener('click',function(ev){
+  var w=ev.target.closest('[data-whats-prod]');
+  if(w){abrirWhats('Oi Gabs! Fiz o teste de nível e quero o '+PRODUTOS[w.getAttribute('data-whats-prod')].t+'.');return}
+  if(ev.target.closest('[data-form]')){document.getElementById('q-form').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){document.getElementById('f-nome').focus()},400)}
+});
+['f-nome','f-whats'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){document.getElementById('f-erro').hidden=true})});
+document.getElementById('f-enviar').addEventListener('click',function(){
+  var p=payload(),cam=st.cam,erro=document.getElementById('f-erro'),ok=document.getElementById('f-ok');
+  if(!p.nome||p.whatsapp.replace(/\D/g,'').length<10){erro.hidden=false;return}
+  erro.hidden=true;var btn=this;btn.disabled=true;
+  var done=function(){
+    if(cam.form.whats){
+      ok.textContent='Recebido! Abrindo o WhatsApp da Gabs.';ok.classList.add('on');
+      var msg='Oi Gabs! Sou '+p.nome+'. Fiz o teste de nível: '+(p.nivel==='ZERO'?'iniciante':p.nivel)+'. Objetivo: '+(OBJ_LABEL[p.objetivo]||p.objetivo)+'. Resultado: '+cam.t+'.';
+      if(cam.id==='individual')msg+=' Motivo: '+(FORMATO_LABEL[p.formato]||'')+(p.motivo_individual?' ('+p.motivo_individual+')':'')+'.';
+      setTimeout(function(){abrirWhats(msg)},900);
+    }else{ok.textContent=cam.form.ok;ok.classList.add('on')}
+  };
+  var ep=root.getAttribute('data-endpoint'),key=root.getAttribute('data-apikey');
   if(ep){
     fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','apikey':key||'','Authorization':'Bearer '+(key||''),'Prefer':'return=minimal'},body:JSON.stringify(p)})
       .then(done).catch(function(){done()});
